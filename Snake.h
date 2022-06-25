@@ -1,7 +1,3 @@
-//
-// Created by pawel on 16.06.2022.
-//
-
 #ifndef JUMP_SNAKE_H
 #define JUMP_SNAKE_H
 #include <SFML/Graphics.hpp>
@@ -16,15 +12,15 @@ enum Direction
 };
 
 struct SnakeBlock {
-    enum Direction dir;
-    sf::RectangleShape block;
+    sf::CircleShape block;
 };
 
 class Snake {
 private:
     int size;
     float speed;
-    struct SnakeBlock snake[100];
+    enum Direction dir;
+    struct SnakeBlock snake[201];
 public:
     Snake();
     void draw(sf::RenderWindow *window);

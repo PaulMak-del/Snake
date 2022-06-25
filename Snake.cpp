@@ -1,19 +1,15 @@
-//
-// Created by pawel on 16.06.2022.
-//
-
 #include "Snake.h"
 #include "myMath.h"
 
-Snake::Snake()
-{
+Snake::Snake() {
     this->size = 5;
-    this->speed = 25;
+    this->speed = 12;
+    this->dir = RIGHT;
     for (int i = 0; i < this->size; i++) {
-        snake[i].block = sf::RectangleShape(sf::Vector2f(25.0f, 25.0f));
-        snake[i].block.setPosition(sf::Vector2f(500.0f - 25.0f * i, 500.0f));
+        snake[i].block = sf::CircleShape(12.0f);
+        snake[i].block.setOrigin(snake[i].block.getRadius() / 2, snake[i].block.getRadius() / 2);
+        snake[i].block.setPosition(sf::Vector2f(500.0f - 24.0f * i, 500.0f));
         snake[i].block.setFillColor(sf::Color::Green);
-        snake[i].dir = RIGHT;
     }
 }
 
@@ -26,26 +22,25 @@ void Snake::draw(sf::RenderWindow *window)
 
 void Snake::move(sf::RenderWindow *window)
 {
-    for (int i = 0; i < this->size; i++) {
-        switch (this->snake[i].dir) {
-            case RIGHT:
-                this->snake[i].block.move(this->speed, 0.0f);
-                break;
-            case LEFT:
-                this->snake[i].block.move(-this->speed, 0.0f);
-                break;
-            case UP:
-                this->snake[i].block.move(0.0f, -this->speed);
-                break;
-            case DOWN:
-                this->snake[i].block.move(0.0f, this->speed);
-                break;
-        }
+    for (int i = this->size - 1; i > 0; --i) {
+        this->snake[i].block.setPosition(this->snake[i-1].block.getPosition());
     }
 
-    for (int i = this->size - 1; i > 0; --i) {
-        this->snake[i].dir = this->snake[i-1].dir;
+    switch (this->dir) {
+        case RIGHT:
+            this->snake[0].block.move(this->speed, 0.0f);
+            break;
+        case LEFT:
+            this->snake[0].block.move(-this->speed, 0.0f);
+            break;
+        case UP:
+            this->snake[0].block.move(0.0f, -this->speed);
+            break;
+        case DOWN:
+            this->snake[0].block.move(0.0f, this->speed);
+            break;
     }
+
     for (int i = 0; i < this->size; ++i) {
         if (this->snake[i].block.getPosition().x >= window->getSize().x) {
             this->snake[i].block.setPosition(0, this->snake[i].block.getPosition().y);
@@ -62,54 +57,35 @@ void Snake::move(sf::RenderWindow *window)
     }
 }
 
-sf::Vector2f Snake::getPosition()
-{
+sf::Vector2f Snake::getPosition() {
     return this->snake[0].block.getPosition();
 }
 
-void Snake::setDirection(enum Direction dir)
-{
-    this->snake[0].dir = dir;
+void Snake::setDirection(enum Direction dir) {
+    this->dir = dir;
 }
 
-void Snake::addBlock()
-{
-    if (this->size >= 99) {
+void Snake::addBlock() {
+    if (this->size >= 200) {
         // segmentation fault
         return;
     }
-    this->snake[size].block = sf::RectangleShape(sf::Vector2f(25.0f, 25.0f));
-    this->snake[size].block.setPosition(this->snake[size-1].block.getPosition());
+    this->snake[size].block = sf::CircleShape(12.0f);
+    this->snake[size].block.setOrigin(this->snake[size].block.getRadius() / 2, this->snake[size].block.getRadius() / 2);
+    this->snake[size].block.setPosition(this->snake[size - 1].block.getPosition());
     this->snake[size].block.setFillColor(sf::Color::Green);
-    this->snake[size].dir = RIGHT;
-    switch (this->snake[size-1].dir) {
-        case RIGHT:
-            this->snake[size].dir = RIGHT;
-            this->snake[size].block.move(-25.0f, 0.0f);
-            break;
-        case LEFT:
-            this->snake[size].dir = LEFT;
-            this->snake[size].block.move(25.0f, 0.0f);
-            break;
-        case UP:
-            this->snake[size].dir = UP;
-            this->snake[size].block.move(0.0f, 25.0f);
-            break;
-        case DOWN:
-            this->snake[size].dir = DOWN;
-            this->snake[size].block.move(0.0f, -25.0f);
-            break;
-    }
-    this->size++;
+    this->snake[size + 1].block = sf::CircleShape(12.0f);
+    this->snake[size + 1].block.setOrigin(this->snake[size].block.getRadius() / 2, this->snake[size].block.getRadius() / 2);
+    this->snake[size + 1].block.setPosition(this->snake[size - 1].block.getPosition());
+    this->snake[size + 1].block.setFillColor(sf::Color::Green);
+    this->size += 2;
 }
 
-enum Direction Snake::getDirection()
-{
-    return this->snake[0].dir;
+enum Direction Snake::getDirection() {
+    return this->dir;
 }
 
-bool Snake::checkCollision()
-{
+bool Snake::checkCollision() {
     bool over = false;
     for (int i = 1; i < this->size; ++i) {
         if (getDistance(this->snake[0].block.getPosition(), this->snake[i].block.getPosition()) <= 5) {
