@@ -8,9 +8,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "Snake.h"
-#include <cmath>
+#include "drawable/Snake.h"
 #include "myMath.h"
+#include "drawable/GoodBerries.h"
 
 const int TURNING_TIME = 100;
 
@@ -24,10 +24,7 @@ int main() {
 
     Snake snake;
 
-    sf::CircleShape food(12.0f);
-    food.setOrigin(food.getRadius() / 2, food.getRadius() / 2);
-    food.setFillColor(sf::Color::Blue);
-    food.setPosition(600, 400);
+    GoodBerries good_ber(12.0f, sf::Vector2f(600, 400), sf::Color::Blue);
 
     sf::Clock clock;
     sf::Clock lastTurn;
@@ -78,13 +75,8 @@ int main() {
         }
         //-------------------------------------------------------
         //-----------------Feeding_snake-------------------------
-        if (getDistance(snake.getPosition(), food.getPosition()) <= 12.0f + food.getRadius()) {
-            snake.addBlock();
-            // float randX = rand() % (width - 25);
-            float randX = round((rand() % (width - 25)) / 25) * 25;
-            float randY = round((rand() % (height - 25)) / 25) * 25;
-            // float randY = rand() % (height - 25);
-            food.setPosition(randX, randY);
+        if (getDistance(snake.getPosition(), good_ber.getPosition()) <= 12.0f + good_ber.getRadius()) {
+            good_ber.eaten(&window, &snake);
         }
         //-------------------------------------------------------
         //----------Check_the_game_over---------------------------
@@ -92,7 +84,7 @@ int main() {
 
         window.clear();
         snake.draw(&window);
-        window.draw(food);
+        good_ber.draw(&window);
         window.display();
     }
 

@@ -1,5 +1,5 @@
 #include "Snake.h"
-#include "myMath.h"
+#include "../myMath.h"
 
 Snake::Snake() {
     this->size = 5;
