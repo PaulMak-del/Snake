@@ -1,16 +1,17 @@
 /*
  * ----TODO----
- * 1. Add bad berries (that makes snake smaller)
- * 2. Add poisoned berries (snake dies)
+ * 1. Add bad berries (that makes snake smaller) --DONE
+ * 2. Add poisoned berries (snake dies) -----------DONE
  * 3. Add mice (they run away from snake)
- * 4. Problem with "food" that can spawn in the snake
+ * 4. Food can spawn in other objects
  */
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "drawable/Snake.h"
 #include "myMath.h"
-#include "drawable/GoodBerries.h"
+#include "drawable/Berries.h"
+// #include "drawable/BadBerries.h"
 
 const int TURNING_TIME = 100;
 
@@ -24,7 +25,9 @@ int main() {
 
     Snake snake;
 
-    GoodBerries good_ber(12.0f, sf::Vector2f(600, 400), sf::Color::Blue);
+    GoodBerries good_berries(12.0f, sf::Vector2f(300, 100), sf::Color::Blue);
+    BadBerries bad_berries(12.0f, sf::Vector2f(400, 300), sf::Color::Red);
+    PoisonedBerries poison(12.0f, sf::Vector2f(100, 200), sf::Color(0, 255, 255, 255));
 
     sf::Clock clock;
     sf::Clock lastTurn;
@@ -68,23 +71,32 @@ int main() {
         }
         //-------------------------------------------------------
         //--------Snake_movement---------------------------------
-        if (!snake.checkCollision()) {
+        if (snake.isAlive()) {
             snake.move(&window);
-        } else {
+        }
+        if (snake.checkCollision()) {
             snake.kill();
         }
         //-------------------------------------------------------
         //-----------------Feeding_snake-------------------------
-        if (getDistance(snake.getPosition(), good_ber.getPosition()) <= 12.0f + good_ber.getRadius()) {
-            good_ber.eaten(&window, &snake);
+        if (getDistance(snake.getPosition(), good_berries.getPosition()) <= 12.0f + good_berries.getRadius()) {
+            good_berries.eaten(&window, &snake);
+        }
+        if (getDistance(snake.getPosition(), bad_berries.getPosition()) <= 12.0f + bad_berries.getRadius()) {
+            bad_berries.eaten(&window, &snake);
+        }
+        if (getDistance(snake.getPosition(), poison.getPosition()) <= 12.0f + poison.getRadius()) {
+            poison.eaten(&window, &snake);
         }
         //-------------------------------------------------------
         //----------Check_the_game_over---------------------------
         //-------------------------------------------------------
 
         window.clear();
+        good_berries.draw(&window);
+        bad_berries.draw(&window);
+        poison.draw(&window);
         snake.draw(&window);
-        good_ber.draw(&window);
         window.display();
     }
 

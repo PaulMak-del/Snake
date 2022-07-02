@@ -20,6 +20,7 @@ private:
     int size;
     float speed;
     enum Direction dir;
+    bool alive;
     struct SnakeBlock snake[201];
 public:
     Snake();
@@ -27,10 +28,12 @@ public:
     void move(sf::RenderWindow *window);
     void setDirection(enum Direction dir);
     void addBlock();
+    void removeBlock();
     enum Direction getDirection();
     sf::Vector2f getPosition();
     bool checkCollision();
     void kill();
+    bool isAlive();
 };
 
 

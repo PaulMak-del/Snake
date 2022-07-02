@@ -5,6 +5,7 @@ Snake::Snake() {
     this->size = 5;
     this->speed = 12;
     this->dir = RIGHT;
+    this->alive = true;
     for (int i = 0; i < this->size; i++) {
         snake[i].block = sf::CircleShape(12.0f);
         snake[i].block.setOrigin(snake[i].block.getRadius() / 2, snake[i].block.getRadius() / 2);
@@ -71,14 +72,27 @@ void Snake::addBlock() {
         return;
     }
     this->snake[size].block = sf::CircleShape(12.0f);
-    this->snake[size].block.setOrigin(this->snake[size].block.getRadius() / 2, this->snake[size].block.getRadius() / 2);
+    this->snake[size].block.setOrigin(this->snake[size].block.getRadius() / 2,
+                                      this->snake[size].block.getRadius() / 2);
     this->snake[size].block.setPosition(this->snake[size - 1].block.getPosition());
     this->snake[size].block.setFillColor(sf::Color::Green);
     this->snake[size + 1].block = sf::CircleShape(12.0f);
-    this->snake[size + 1].block.setOrigin(this->snake[size].block.getRadius() / 2, this->snake[size].block.getRadius() / 2);
+    this->snake[size + 1].block.setOrigin(this->snake[size].block.getRadius() / 2,
+                                          this->snake[size].block.getRadius() / 2);
     this->snake[size + 1].block.setPosition(this->snake[size - 1].block.getPosition());
     this->snake[size + 1].block.setFillColor(sf::Color::Green);
     this->size += 2;
+}
+
+void Snake::removeBlock() {
+    if (this->size <= 3) {
+        kill();
+        return;
+    } else {
+        this->snake[size].block.setPosition(-100, -100); //TODO rewrite this crap
+        this->snake[size - 1].block.setPosition(-100, -100); //TODO rewrite this crap
+        this->size -= 2;
+    }
 }
 
 enum Direction Snake::getDirection() {
@@ -100,4 +114,9 @@ void Snake::kill() {
     for (int i = 0; i < this->size; i++) {
         this->snake[i].block.setFillColor(sf::Color::Red);
     }
+    this->alive = false;
+}
+
+bool Snake::isAlive() {
+    return alive;
 }
