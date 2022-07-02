@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //JUMP_FOOD_H
+#endif // JUMP_FOOD_H
