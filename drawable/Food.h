@@ -11,7 +11,7 @@ class Food {
 private:
     sf::CircleShape food;
 public:
-    Food(float radius, sf::Vector2f position, sf::Color color);
+    Food(float radius=12.0f, sf::Color color=sf::Color::White);
     void draw(sf::RenderWindow* window);
     sf::Vector2f getPosition();
     float getRadius();

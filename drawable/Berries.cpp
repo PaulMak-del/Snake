@@ -1,7 +1,7 @@
 #include <cmath>
 #include "Berries.h"
 
-GoodBerries::GoodBerries(float radius, sf::Vector2f position, sf::Color color) : Food(radius, position, color) {}
+GoodBerries::GoodBerries(float radius, sf::Color color) : Food(radius, color) {}
 
 void GoodBerries::eaten(sf::RenderWindow* window, Snake* snake) {
     snake->addBlock();
@@ -10,7 +10,7 @@ void GoodBerries::eaten(sf::RenderWindow* window, Snake* snake) {
     this->setPosition(randX, randY);
 }
 
-BadBerries::BadBerries(float radius, sf::Vector2f v, sf::Color color) : Food(radius, v, color) {}
+BadBerries::BadBerries(float radius, sf::Color color) : Food(radius, color) {}
 
 void BadBerries::eaten(sf::RenderWindow *window, Snake *snake) {
     snake->removeBlock();
@@ -19,7 +19,7 @@ void BadBerries::eaten(sf::RenderWindow *window, Snake *snake) {
     this->setPosition(randX, randY);
 }
 
-PoisonedBerries::PoisonedBerries(float radius, sf::Vector2f v, sf::Color color) : Food(radius, v, color) {}
+PoisonedBerries::PoisonedBerries(float radius, sf::Color color) : Food(radius, color) {}
 
 void PoisonedBerries::eaten(sf::RenderWindow *window, Snake *snake) {
     snake->kill();
