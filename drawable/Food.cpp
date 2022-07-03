@@ -1,10 +1,12 @@
 #include <iostream>
 #include "Food.h"
 
-Food::Food(float radius, sf::Vector2f position, sf::Color color) {
+Food::Food(float radius, sf::Color color) {
     this->food.setRadius(radius);
     this->food.setFillColor(color);
-    this->food.setPosition(position);
+    float x = (rand() % 775) + 25; // How can I see windows width
+    float y = (rand() % 375) + 25; //       and height from here?
+    this->food.setPosition(x, y);
     this->food.setOrigin(radius / 2, radius / 2);
 }
 

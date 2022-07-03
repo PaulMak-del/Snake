@@ -120,3 +120,7 @@ void Snake::kill() {
 bool Snake::isAlive() {
     return alive;
 }
+
+float Snake::getRadius() {
+    return this->snake->block.getRadius();
+}

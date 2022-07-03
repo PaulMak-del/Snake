@@ -34,6 +34,7 @@ public:
     bool checkCollision();
     void kill();
     bool isAlive();
+    float getRadius();
 };
 
 
