@@ -2,19 +2,19 @@
  * ----TODO----
  * 1. Add bad berries (that makes snake smaller) --DONE
  * 2. Add poisoned berries (snake dies) -----------DONE
- * 3. Add mice (they run away from snake)
- * 4. Food can spawn in other objects
- * 5. Add menu
- * 5.1. Add restart button
- * 6. Add timer and increasing complexity
- * 7. Add new feature (like walls, mice or
+ * 3. Food can spawn in other objects
+ * 4. Add menu
+ * 4.1. Add restart button
+ * 5. Add timer and increasing complexity ---------DONE
+ * 6. Add new feature (like walls, mice or
  *                      tricks with tail)
- * 8. Should I create 'game' class for window creating?
+ * 7. Should I create 'game' class for window creating?
  *    Then I can put 'game' object in methods and get access to window size or score
  */
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <cmath>
 #include <iostream>
 #include "drawable/Snake.h"
 #include "myMath.h"
@@ -33,6 +33,7 @@ int main() {
     //Score
     int num_score = 1;
     sf::Text string_score;
+    sf::Text time;
     sf::Font font;
     if (!font.loadFromFile(R"(D:\Projects\C++\Snake\font.ttf)")) {
         std::cout << "FONT NOT FOUND\n";
@@ -41,6 +42,10 @@ int main() {
     string_score.setString("SCORE: " + std::to_string(num_score));
     string_score.setFillColor(sf::Color::White);
     string_score.setCharacterSize(24);
+    time.setFont(font);
+    time.setCharacterSize(25);
+    time.setFillColor(sf::Color::White);
+    time.setPosition(width - 200, 0);
 
     Snake snake;
 
@@ -50,8 +55,6 @@ int main() {
 
     std::vector<Food*> food;
     food.push_back(goodBerriesFactory->createFood());
-    food.push_back(badBerriesFactory->createFood());
-    food.push_back(poisonedBerriesFactory->createFood());
 
     sf::Clock clock;
     sf::Clock lastTurn;
@@ -63,7 +66,14 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         //------------------Increasing_Complexity----------------
+        if (clock.getElapsedTime().asMilliseconds() % 10000 > 0 && clock.getElapsedTime().asMilliseconds() % 10000 < 100) {
+            food.push_back(badBerriesFactory->createFood());
+        }
+        if (clock.getElapsedTime().asMilliseconds() % 20000 > 0 && clock.getElapsedTime().asMilliseconds() % 20000 < 100) {
+            food.push_back(poisonedBerriesFactory->createFood());
+        }
         //-------------------------------------------------------
         //------------------KEYBOARD_EVENTS----------------------
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -103,6 +113,7 @@ int main() {
         //--------Snake_movement---------------------------------
         if (snake.isAlive()) {
             snake.move(&window);
+            time.setString(std::to_string(clock.getElapsedTime().asSeconds()));
         }
         if (snake.checkCollision()) {
             snake.kill();
@@ -127,6 +138,7 @@ int main() {
 
         window.clear();
         window.draw(string_score);
+        window.draw(time);
         for (int i = 0; i < food.size(); i++) {
             food[i]->draw(&window);
         }
