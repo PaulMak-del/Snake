@@ -20,7 +20,6 @@ enum GameState {
 
 class Game {
 private:
-    sf::RenderWindow window;
     //Score and Time
     int score;
     sf::Text string_score;
@@ -38,16 +37,16 @@ private:
     //Food
     std::vector<Food*> food;
 
-    void init();
-    void game_loop();
     void draw();
     void key_processing();
 public:
     enum GameState state;
+    sf::RenderWindow window;
 
     Game(int width, int height);
+    void init();
     void menu();
-    void game_run();
+    void game_loop();
     void game_over();
 };
 

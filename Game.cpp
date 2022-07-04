@@ -10,6 +10,36 @@ Game::Game(int width, int height) {
     this->state = GAME_LOOP;
 }
 
+void Game::menu() {
+
+}
+
+void Game::game_over() {
+    sf::Event event;
+    while (this->window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            this->window.close();
+    }
+
+    sf::Text game_over_text;
+    game_over_text.setString("PRESS \"ENTER\" TO RESTART");
+    game_over_text.setFont(this->font);
+    game_over_text.setFillColor(sf::Color::White);
+    game_over_text.setCharacterSize(50);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        window.close();
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+        init();
+        this->state = GAME_LOOP;
+    }
+
+    this->window.clear();
+    this->window.draw(game_over_text);
+    this->window.display();
+}
+
 void Game::init() {
     this->score = 1;
     if (!this->font.loadFromFile(R"(D:\Projects\C++\Snake\font.ttf)")) {
@@ -24,11 +54,11 @@ void Game::init() {
     this->time.setFillColor(sf::Color::White);
     this->time.setPosition(this->window.getSize().x - 200, 0);
 
+    this->food.clear();
     this->food.push_back(this->goodBerriesFactory.createFood());
 }
 
 void Game::game_loop() {
-    //---Clock---
     sf::Event event;
     while (this->window.pollEvent(event)) {
         if (event.type == sf::Event::Closed)
@@ -50,6 +80,8 @@ void Game::game_loop() {
     if (snake.isAlive()) {
         snake.move(&window);
         time.setString(std::to_string(clock.getElapsedTime().asSeconds()));
+    } else {
+        this->state = GAME_OVER;
     }
     if (snake.checkCollision()) {
         snake.kill();
@@ -83,13 +115,6 @@ void Game::draw() {
     }
     snake.draw(&window);
     window.display();
-}
-
-void Game::game_run() {
-    init();
-    while (this->window.isOpen()) {
-        game_loop();
-    }
 }
 
 void Game::key_processing() {
