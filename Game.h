@@ -1,7 +1,3 @@
-//
-// Created by pawel on 04.07.2022.
-//
-
 #ifndef JUMP_GAME_H
 #define JUMP_GAME_H
 

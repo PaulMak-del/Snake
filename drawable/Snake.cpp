@@ -2,14 +2,14 @@
 #include "../myMath.h"
 
 Snake::Snake() {
-    this->size = 5;
+    this->size = 10;
     this->speed = 12;
     this->dir = RIGHT;
     this->alive = true;
     for (int i = 0; i < this->size; i++) {
         snake[i].block = sf::CircleShape(12.0f);
         snake[i].block.setOrigin(snake[i].block.getRadius() / 2, snake[i].block.getRadius() / 2);
-        snake[i].block.setPosition(sf::Vector2f(500.0f - 24.0f * i, 500.0f));
+        snake[i].block.setPosition(sf::Vector2f(-10 * (i + 10), 0));
         snake[i].block.setFillColor(sf::Color::Green);
     }
 }
@@ -60,6 +60,14 @@ void Snake::move(sf::RenderWindow *window)
 
 sf::Vector2f Snake::getPosition() {
     return this->snake[0].block.getPosition();
+}
+
+void Snake::setPosition(int x, int y) {
+    this->snake[0].block.setPosition(x, y);
+}
+
+void Snake::setPosition(sf::Vector2f v) {
+    this->snake[0].block.setPosition(v);
 }
 
 void Snake::setDirection(enum Direction dir) {
@@ -115,6 +123,14 @@ void Snake::kill() {
         this->snake[i].block.setFillColor(sf::Color::Red);
     }
     this->alive = false;
+}
+
+void Snake::revive() {
+    for (int i = 0; i < this->size; i++) {
+        this->snake[i].block.setFillColor(sf::Color::Green);
+    }
+    this->size = 5;
+    this->alive = true;
 }
 
 bool Snake::isAlive() {
