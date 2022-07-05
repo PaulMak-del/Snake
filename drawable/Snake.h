@@ -31,8 +31,11 @@ public:
     void removeBlock();
     enum Direction getDirection();
     sf::Vector2f getPosition();
+    void setPosition(int x, int y);
+    void setPosition(sf::Vector2f v);
     bool checkCollision();
     void kill();
+    void revive();
     bool isAlive();
     float getRadius();
 };
